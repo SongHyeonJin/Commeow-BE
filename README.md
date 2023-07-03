@@ -132,8 +132,11 @@ ___
 <p align="center">  (Before) 초기 아키텍처의 VUser = 20000명, Duration = 30분 스트리밍 테스트</p>  
 
 <p align="center"><img src="https://github.com/SongHyeonJin/Commeow-BE/assets/101760007/447c89bf-32eb-46e1-b8db-43739890b760" width = "60%" height = "30%"></p>
-<p align="center"> (After) 아키텍처 변경 후의 VUser = 20000명, Duration = 30분 스트리밍 테스트</p>       
+<p align="center"> (After) 아키텍처 변경 후의 VUser = 20000명, Duration = 30분 스트리밍 테스트</p>     
+
 ___
+
+
 >⛔ **트러블 슈팅**
 
 1️⃣ 스트리머가 방송을 잠시 중단한 뒤에 다시 방송을 시작했을 때, 현재 스트리밍 중인 영상 데이터를 찾지 못하는 문제
