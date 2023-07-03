@@ -92,6 +92,48 @@ ___
 <p align="center"><img src="https://github.com/jeonga127/Commeow-BE/assets/71822288/fec01513-fe79-4611-954c-dc3d5ea48b71" width = "60%" height = "30%"></p>
 
 ___
+### 구현 기능
+
+- **트랜스코딩**
+    - OBS를 통해 받아온 방송을 FFmpeg를 이용하여 트랜스코딩을 진행합니다.
+    - 스트리밍 서비스를 통해 전송된 영상 파일들을 처리합니다.
+    - 4초 간격으로 영상 파일을 생성하여 저장합니다.
+- **HLS(Http Live Streaming)**
+    - Spring WebFlux를 활용하여 HLS 프로토콜을 지원하는 웹 서비스를 개발하여, 효율적인 멀티미디어 콘텐츠 전송 및 원활한 사용자 경험을 제공하였습니다.
+- **파일 삭제 로직 구현**
+    - 원활한 스트리밍 서비스 제공받기 위해 영상 순서 정보 제공하는 매니페스트 파일과 그에 상응되는 영상 데이터 파일을 지속적으로 수신하게 하기 위해 불필요한 파일을 삭제해줘야겠다고 판단했습니다.
+    - **VUser 1000명, Duration 5분** 이라는 동일한 테스트 환경에서 **성공률**이 **23% ~ 100%** 로 비약적으로 상승되었습니다.
+
+<p align="center"><img src="https://github.com/SongHyeonJin/Commeow-BE/assets/101760007/428aa733-a0b3-42dc-826f-9b842c0514d4" width = "60%" height = "30%"></p>
+<p align="center"><img src="https://github.com/SongHyeonJin/Commeow-BE/assets/101760007/487cbea8-5f07-4722-adb1-b0ecedb25dc5" width = "60%" height = "30%">
+<p align="center">(Before) 자동 파일 삭제 기능이 없을 때의 VUser = 1000명, Duration = 5분 스트리밍 테스트</p>
+        
+<p align="center"><img src="https://github.com/SongHyeonJin/Commeow-BE/assets/101760007/60f84770-5a8c-4603-98fe-947cbf44be36" width = "60%" height = "30%"></p>
+<p align="center"><img src="https://github.com/SongHyeonJin/Commeow-BE/assets/101760007/dc6fa302-a010-431f-a045-0a5a9edfaea8" width = "60%" height = "30%"></p>
+<p align="center">(After)  자동 파일 삭제 기능 추가 후 VUser = 1000명, Duration = 5분 스트리밍 테스트</p>    
+
+- **파일 삭제 로직 비동기화**
+    - 파일 삭제 로직을 동기식으로 작성했을 때 스트리밍 특성상 여러 명의 스트리머가 동시에 방송 송출하기 때문에 성능 개선을 위해 비동기 방식으로 변경해 **요청 실패율**이 **11.09%** -> **0.49%** 로 개선되었습니다.
+        
+<p align="center"><img src="https://github.com/SongHyeonJin/Commeow-BE/assets/101760007/3a7259d1-9032-4cdb-8424-e1388fef12c7" width = "60%" height = "30%"></p>
+<p align="center"><img src="https://github.com/SongHyeonJin/Commeow-BE/assets/101760007/891625ca-6a2c-4a7a-814e-a8c2890d35ca" width = "60%" height = "30%"></p>
+  
+- **서버 아키텍처 변경**
+    - 처음엔 AWS EC2 클라우드 서버에 Docker를 설치하고, 4개의 컨테이너를 사용했습니다. 스트리밍 특성상 Streaming Service 서버는 RTMP 프로토콜을 사용하여 OBS로부터 지속적으로 전송되는 데이터를 디코딩, 인코딩해야 합니다. 그렇기 때문에, 서버의 메모리나 처리량의 측면에서 Streaming Service 서버를 새로운 서버로 분리하는 것이 효율적이라고 생각했습니다. 실제로 **20,000명**의 가상 시청자가 방송을 시청하는 상황을 테스트했을 때, **요청 처리 실패율이 33.49% 감소**하는 것을 확인할 수 있었습니다.
+
+<p align="center"><img src="https://github.com/SongHyeonJin/Commeow-BE/assets/101760007/37d1f63d-ebe0-4698-bd05-876b3ef8d60b" width = "60%" height = "30%"></p>
+<p align="center">서비스 초기의 아키텍처</p>    
+
+      
+<p align="center"><img src="https://github.com/SongHyeonJin/Commeow-BE/assets/101760007/674ae13f-9c7a-44ba-a395-4b22e4451f84" width = "60%" height = "30%"></p>
+<p align="center"> 이후 변경된 아키텍처</p>  
+  
+<p align="center"><img src="https://github.com/SongHyeonJin/Commeow-BE/assets/101760007/c28c886f-76f3-4148-bdda-0dc1403c0ae9" width = "60%" height = "30%"></p>
+<p align="center">  (Before) 초기 아키텍처의 VUser = 20000명, Duration = 30분 스트리밍 테스트</p>  
+
+<p align="center"><img src="https://github.com/SongHyeonJin/Commeow-BE/assets/101760007/447c89bf-32eb-46e1-b8db-43739890b760" width = "60%" height = "30%"></p>
+<p align="center"> (After) 아키텍처 변경 후의 VUser = 20000명, Duration = 30분 스트리밍 테스트</p>       
+___
 >⛔ **트러블 슈팅**
 
 1️⃣ 스트리머가 방송을 잠시 중단한 뒤에 다시 방송을 시작했을 때, 현재 스트리밍 중인 영상 데이터를 찾지 못하는 문제
