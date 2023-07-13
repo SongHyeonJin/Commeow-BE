@@ -1,5 +1,8 @@
 ### **Commeow!** 🐈‍⬛
 ___
+<p align="center"><img src="https://github.com/SongHyeonJin/Commeow-BE/assets/101760007/86c12dce-9bb4-4436-8d54-ad28e1cd51e2" width = "60%" height = "30%"></p>
+
+___
 
 >📺 **프로젝트 소개**
 
